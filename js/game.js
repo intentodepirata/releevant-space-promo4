@@ -4,6 +4,8 @@
 let player;
 let enemy;
 let cursors;
+let background;
+let background2;
 
 /**
  * It prelaods all the assets required in the game.
@@ -19,7 +21,9 @@ function preload() {
  */
 function create() {
   // scene background
-  this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, "sky");
+  background = this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, "sky");
+  background2 = this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, "sky");
+  background2.setY(background2.y - background.height);
 
   // playet setup
   player = this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT, "player");
@@ -40,7 +44,45 @@ function create() {
 /**
  * Updates each game object of the scene.
  */
+
 function update() {
-  if (cursors.left.isDown) {
+  movePlayer()
+  moveBackground()
+ 
+
+
+
+}
+
+
+function movePlayer(){
+  if (cursors.left.isDown & player.x >(player.width/2)*PLAYER_SCALE) {
+    console.log(player)
+    player.x -= PLAYER_VELOCITY;
+  }
+   
+  if (cursors.right.isDown & player.x < SCREEN_WIDTH-(player.width/2)*PLAYER_SCALE) {
+    player.x += PLAYER_VELOCITY;
+  }
+  if (cursors.up.isDown & player.y > (player.height/2)*PLAYER_SCALE) {
+    player.y -= PLAYER_VELOCITY;
+  }
+  if (cursors.down.isDown & player.y < SCREEN_HEIGHT-(player.height/2)*PLAYER_SCALE) {
+    player.y += PLAYER_VELOCITY;
+    
+  }
+}
+
+
+
+function moveBackground(){
+  background.setY(background.y + PLAYER_VELOCITY);
+  background2.setY(background2.y + PLAYER_VELOCITY);
+
+  if (background.y > SCREEN_HEIGHT / 2 + background.height) {
+    background.setY(background2.y - background.height);
+    const backgroundCopia = background;
+    background = background2;
+    background2 = backgroundCopia;
   }
 }
